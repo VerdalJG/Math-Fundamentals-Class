@@ -32,8 +32,6 @@
 *.app
 
 # matches any files and directories with the name test
-common/
-data/
 Debug/
 x64/
 .vs/
