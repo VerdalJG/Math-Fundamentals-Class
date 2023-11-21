@@ -100,7 +100,7 @@ struct Exercise1 {
 		camera.yaw_speed = 120.f;
 
 		cameraMatrix = identity_mat4();
-		cameraPosition = vec3(3, 2, 7); // x -> move right :: y -> move up :: z -> move towards screen
+		cameraPosition = vec3(0, 0, 7); // x -> move right :: y -> move up :: z -> move towards screen
 
 		// tell GL to only draw onto a pixel if the shape is closer to the viewer
 		glEnable(GL_DEPTH_TEST); // enable depth-testing
@@ -129,10 +129,34 @@ struct Exercise1 {
 			glfwSetWindowShouldClose(window, 1);
 		}
 
-		// TODO: change following line to translate and rotate camera 
-		cameraMatrix = translate(identity_mat4(), cameraPosition*-1.f);
+		// TODO: change following line to translate and rotate camera
+
+		int moveSpeed = 3;
+
+		if (glfwGetKey(window, GLFW_KEY_DOWN)) 
+		{
+			cameraPosition.y -= moveSpeed * elapsed_seconds;
+		}
+		if (glfwGetKey(window, GLFW_KEY_UP))
+		{
+			cameraPosition.y += moveSpeed * elapsed_seconds;
+		}
+		if (glfwGetKey(window, GLFW_KEY_RIGHT))
+		{
+			cameraPosition = vec3(cameraPosition.x + moveSpeed * elapsed_seconds, cameraPosition.y, cameraPosition.z);
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT))
+		{
+			cameraPosition = vec3(cameraPosition.x - moveSpeed * elapsed_seconds, cameraPosition.y, cameraPosition.z);
+		}
+		cameraMatrix = translate(identity_mat4(), cameraPosition*-1.f); // Se multiplica por -1 porque camera position es un vector desde el origen
+		// Move camera backwards to maintain forwards orientation
 
 		// TODO: change following line to translate and rotate cube
+		if (glfwGetKey(window, GLFW_KEY_D))
+		{
+			cubePosition.x += moveSpeed * elapsed_seconds;
+		}
 		cubeMatrix = translate(identity_mat4(), cubePosition);
 
 		glUseProgram(lines_shader_index);
