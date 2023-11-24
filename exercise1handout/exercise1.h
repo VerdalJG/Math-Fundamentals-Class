@@ -22,6 +22,7 @@ struct Exercise1 {
 	Lines cubeLines;
 	mat4 cubeMatrix;
 	vec3 cubePosition;
+	float cubeRotation;
 
 	Lines referenceFrameLines;
 	mat4 referenceFrameMatrix;
@@ -79,6 +80,7 @@ struct Exercise1 {
 		cubeLines.load_to_gpu();
 		cubeMatrix = identity_mat4();
 		cubePosition = vec3(0, 0, 0);
+		//cubeRotation = vec3(0, 0, 0);
 
 		Shapes::addArrow(referenceFrameLines, vec3(0, 0, 0), vec3(1, 0, 0), vec3(1, 0, 0));
 		Shapes::addArrow(referenceFrameLines, vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 1, 0));
@@ -154,8 +156,9 @@ struct Exercise1 {
 
 		// TODO: change following line to translate and rotate cube
 		if (glfwGetKey(window, GLFW_KEY_D))
-		{
+		{	
 			cubePosition.x += moveSpeed * elapsed_seconds;
+			cubeMatrix = rotate_z_deg(identity_mat4(), 25);
 		}
 		cubeMatrix = translate(identity_mat4(), cubePosition);
 
