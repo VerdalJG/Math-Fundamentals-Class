@@ -80,7 +80,7 @@ struct Exercise1 {
 		cubeLines.load_to_gpu();
 		cubeMatrix = identity_mat4();
 		cubePosition = vec3(0, 0, 0);
-		//cubeRotation = vec3(0, 0, 0);
+		cubeRotation = 0;
 
 		Shapes::addArrow(referenceFrameLines, vec3(0, 0, 0), vec3(1, 0, 0), vec3(1, 0, 0));
 		Shapes::addArrow(referenceFrameLines, vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 1, 0));
@@ -133,7 +133,7 @@ struct Exercise1 {
 
 		// TODO: change following line to translate and rotate camera
 
-		int moveSpeed = 3;
+		int moveSpeed = 1;
 
 		if (glfwGetKey(window, GLFW_KEY_DOWN)) 
 		{
@@ -158,9 +158,23 @@ struct Exercise1 {
 		if (glfwGetKey(window, GLFW_KEY_D))
 		{	
 			cubePosition.x += moveSpeed * elapsed_seconds;
-			cubeMatrix = rotate_z_deg(identity_mat4(), 25);
+			cubeRotation -= 20 * elapsed_seconds;
+			
+			
 		}
-		cubeMatrix = translate(identity_mat4(), cubePosition);
+
+		if (glfwGetKey(window, GLFW_KEY_A))
+		{
+			cubePosition.x -= moveSpeed * elapsed_seconds;
+			cubeRotation += 20 * elapsed_seconds;
+
+
+		}
+
+		cubeMatrix = rotate_z_deg(identity_mat4(), cubeRotation);
+		//cubeMatrix = rotate_z_deg(cubeMatrix, cubeRotation);
+		cubeMatrix = translate(cubeMatrix, cubePosition);
+		
 
 		glUseProgram(lines_shader_index);
 

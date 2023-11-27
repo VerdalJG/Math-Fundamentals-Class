@@ -625,7 +625,7 @@ mat4 translate( const mat4 &m, const vec3 &v ) {
 	ret.col[3].y = v.y;
 	ret.col[3].z = v.z;
 	
-	return ret* m;
+	return ret * m;
 }
 
 // rotate around x axis by an angle in degrees

@@ -14,9 +14,6 @@
     <ClCompile Include="lineshapes.cpp">
       <Filter>3D</Filter>
     </ClCompile>
-    <ClCompile Include="exercise1.cpp">
-      <Filter>Exercises</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gl_utils.h">
