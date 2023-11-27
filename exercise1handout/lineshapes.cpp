@@ -86,6 +86,16 @@ void Lines::render(GLuint shader_programme)
 	glBindVertexArray(0);
 }
 
+vec3 arrowVertex(const vec3& to, vec3 crossProduct, int sign)
+{
+	vec3 result;
+	crossProduct *= sign;
+	vec3 edgedirection = to - crossProduct;
+	edgedirection = normalise(edgedirection) * (length(to) * 0.1);
+	result = to - edgedirection;
+	return result;
+}
+
 void Shapes::addArrow(Lines & lines, const vec3 & from, const vec3 & to, const vec3 & color)
 {
 	// TODO: change following code to draw arrow point
@@ -97,57 +107,75 @@ void Shapes::addArrow(Lines & lines, const vec3 & from, const vec3 & to, const v
 	vec3 up = vec3(0, 1, 0);
 	vec3 right = vec3(1, 0, 0);
 	vec3 back = vec3(0, 0, 1);
-	vec3 crossProductUp = cross(to - from, up);
-	vec3 crossProductRight = cross(to - from, right);
-	vec3 crossProductBack = cross(to - from, back);
-	printf("Vector3: %f, %f, %f\n", crossProductUp.x, crossProductUp.y, crossProductUp.z);
-	printf("Vector3: %f, %f, %f\n", crossProductRight.x, crossProductRight.y, crossProductRight.z);
-	printf("Vector3: %f, %f, %f\n", crossProductBack.x, crossProductBack.y, crossProductBack.z);
 
-	//crossProduct *= sign;
-	//vec3 edgeDirection = to - crossProduct;
-	//edgeDirection = normalise(edgeDirection) * (length(to) * 0.1);
-	//to - edgeDirection;
+	vec3 crossProduct1;
+	vec3 crossProduct2;
 
-	/*if (dot(to, up) == length(to) * length(up))
+	if (dot(to, up) == length(to) * length(up))
 	{
-		crossProduct ;
+		crossProduct1 = cross(to - from, right);
+		crossProduct2 = cross(to - from, back);
+	}
+	else if (dot(to, right) == length(to) * length(up))
+	{
+		crossProduct1 = cross(to - from, up);
+		crossProduct2 = cross(to - from, back);
 	}
 	else
 	{
-		crossProduct;
-	}*/
-	
+		crossProduct1 = cross(to - from, up);
+		crossProduct2 = cross(to - from, right);
+	}
 
-	/*vec3 vertex = GetArrowVertex(to, crossProduct, 1);
-	vec3 vertex2 = GetArrowVertex(to, crossProduct, -1);
-	vec3 vertex3 = GetArrowVertex(to, crossProduct, 1);
-	vec3 vertex4 = GetArrowVertex(to, crossProduct, -1);*/
 
 	
+	printf("Vector3: %f, %f, %f\n", crossProduct1.x, crossProduct1.y, crossProduct1.z);
+	printf("Vector3: %f, %f, %f\n", crossProduct2.x, crossProduct2.y, crossProduct2.z);
+
+
+
+	
+
+	vec3 vertex = arrowVertex(to, crossProduct1, 1);
+	vec3 vertex2 = arrowVertex(to, crossProduct1, -1);
+	vec3 vertex3 = arrowVertex(to, crossProduct2, 1);
+	vec3 vertex4 = arrowVertex(to, crossProduct2, -1);
+
+	printf("Vertex1: %f, %f, %f\n", vertex.x, vertex.y, vertex.z);
+	printf("Vertex2: %f, %f, %f\n", vertex2.x, vertex2.y, vertex2.z);
+	printf("Vertex3: %f, %f, %f\n", vertex3.x, vertex3.y, vertex3.z);
+	printf("Vertex4: %f, %f, %f\n", vertex4.x, vertex4.y, vertex4.z);
 
 	vec3 arrow_vertices[] = {
 		from,
 		to,
-		/*vertex,
+		vertex,
 		vertex2,
 		vertex3,
-		vertex4*/
+		vertex4
 	};
 	
 	vec3 arrow_colors[] = {
 		color,
 		color,
+		color,
+		color,
+		color,
+		color
 	};
 
 	unsigned int arrow_indices[] = {
 		0,1, // draw line from arrow_vertices[0] to arrow_vertices[1]
-		/*2,1,
-		3,1*/
+		2,1,
+		3,1,
+		4,1,
+		5,1
 	};
 
-	lines.add(&arrow_vertices[0].v[0], &arrow_colors[0].v[0], 2, &arrow_indices[0], 1);
+	lines.add(&arrow_vertices[0].v[0], &arrow_colors[0].v[0], 6, &arrow_indices[0], 10);
 }
+
+
 
 void Shapes::addGrid(Lines& lines, const vec3& from, const vec3& to, const vec3& color, int divs) {
 	int steps = divs + 1;
