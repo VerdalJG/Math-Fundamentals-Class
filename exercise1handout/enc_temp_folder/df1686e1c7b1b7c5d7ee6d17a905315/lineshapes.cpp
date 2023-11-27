@@ -94,6 +94,13 @@ void Shapes::addArrow(Lines & lines, const vec3 & from, const vec3 & to, const v
 	// add your new positions to arrow_vertices, then the corresponding arrow_colors
 	// finally draw lines with indices arrow_indices
 
+	vec3 orthogonalVectors[]
+	{
+			vec3(1, 0, 0), // Right
+			vec3(0, 1, 0), // Up
+			vec3(0, 0, 1), // Back
+	};
+
 	vec3 up = vec3(0, 1, 0);
 	vec3 right = vec3(1, 0, 0);
 	vec3 back = vec3(0, 0, 1);
@@ -103,6 +110,7 @@ void Shapes::addArrow(Lines & lines, const vec3 & from, const vec3 & to, const v
 	printf("Vector3: %f, %f, %f\n", crossProductUp.x, crossProductUp.y, crossProductUp.z);
 	printf("Vector3: %f, %f, %f\n", crossProductRight.x, crossProductRight.y, crossProductRight.z);
 	printf("Vector3: %f, %f, %f\n", crossProductBack.x, crossProductBack.y, crossProductBack.z);
+
 
 	//crossProduct *= sign;
 	//vec3 edgeDirection = to - crossProduct;
