@@ -90,9 +90,10 @@ vec3 arrowVertex(const vec3& to, vec3 crossProduct, int sign)
 {
 	vec3 result;
 	crossProduct *= sign;
-	vec3 edgedirection = to - crossProduct;
-	edgedirection = normalise(edgedirection) * (length(to) * 0.1);
-	result = to - edgedirection;
+	vec3 edgeDirection = to - crossProduct;
+	float edgeLength = 0.1 * length(edgeDirection);
+	edgeDirection = normalise(edgeDirection) * edgeLength;
+	result = to - edgeDirection;
 	return result;
 }
 
