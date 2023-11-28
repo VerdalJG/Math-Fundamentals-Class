@@ -200,6 +200,24 @@ struct Exercise2 {
 		// camNode.rotation = quat_from_axis_deg(...)* ...;
 		
 		// TODO: use keys to modify cameraPosition here
+		if (glfwGetKey(window, GLFW_KEY_UP)) {
+			cameraPosition.z -= 5 * elapsed_seconds;
+		}
+		if (glfwGetKey(window, GLFW_KEY_DOWN)) {
+			cameraPosition.z += 5 * elapsed_seconds;
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT)) {
+			cameraPosition.x -= 5 * elapsed_seconds;
+		}
+		if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
+			cameraPosition.x += 5 * elapsed_seconds;
+		}
+		if (glfwGetKey(window, GLFW_KEY_E)) {
+			cameraPosition.y -= 5 * elapsed_seconds;
+		}
+		if (glfwGetKey(window, GLFW_KEY_Q)) {
+			cameraPosition.y += 5 * elapsed_seconds;
+		}
 
 		camNode.position = cameraPosition;
 
