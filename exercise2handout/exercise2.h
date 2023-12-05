@@ -197,7 +197,7 @@ struct Exercise2 {
 		camYaw = fmodf(camYaw, 360);
 
 		// TODO: 
-		// camNode.rotation = quat_from_axis_deg(...)* ...;
+		camNode.rotation = quat_from_axis_deg(0.5f, camPitch, camYaw, 0);
 		
 		// TODO: use keys to modify cameraPosition here
 		if (glfwGetKey(window, GLFW_KEY_UP)) {
@@ -224,6 +224,7 @@ struct Exercise2 {
 		mat4 cameraMatrix = translate( identity_mat4(), cameraPosition*-1.f);
 		mat4 gridMatrix = translate(identity_mat4(), vec3(0,0,0));
 
+		// Rotate mesh here
 		meshGroupNode.rotation = quat_from_axis_deg(meshYaw += elapsed_seconds * 10, 0, 1, 0);
 
 		// whole scene hierarchy is updated here from root downwards
@@ -232,24 +233,25 @@ struct Exercise2 {
 		glUseProgram(mesh_shader_index);
 
 		camera.get_shader_uniforms(mesh_shader_index);
-		camera.set_shader_uniforms(mesh_shader_index, cameraMatrix );
+		//camera.set_shader_uniforms(mesh_shader_index, cameraMatrix );
 		// TODO: camera.set_shader_uniforms(lines_shader_index, ...);
+		camera.set_shader_uniforms(mesh_shader_index, camNode.worldInverseMatrix);
 		
 
 		meshGroup.set_shader_uniforms(mesh_shader_index,  ambientColor);
 		meshGroup.render(mesh_shader_index);
-	
+		
 		glUseProgram(0);
 
 		glUseProgram(lines_shader_index);
 
 		camera.get_shader_uniforms(lines_shader_index);
-		camera.set_shader_uniforms(mesh_shader_index, cameraMatrix );
+		//camera.set_shader_uniforms(mesh_shader_index, camNode.worldInverseMatrix);
 		// TODO: camera.set_shader_uniforms(lines_shader_index, ...);
+		camera.set_shader_uniforms(lines_shader_index, camNode.worldInverseMatrix);
 
 		grid.get_shader_uniforms(lines_shader_index);
-		//TODO: grid.set_shader_uniforms(lines_shader_index, ...);
-
+		// TODO: grid.set_shader_uniforms(lines_shader_index, ...);
 		grid.set_shader_uniforms(lines_shader_index, gridMatrix);
 		grid.render(lines_shader_index);
 
@@ -257,7 +259,7 @@ struct Exercise2 {
 		axis.set_shader_uniforms(lines_shader_index, sceneRoot.worldMatrix);
 
 		axis.render(lines_shader_index);
-
+		
 
 		glUseProgram(0);
 
