@@ -79,48 +79,48 @@ struct Exercise3 {
 
 	// as in http://viclw17.github.io/2018/07/16/raytracing-ray-sphere-intersection/
 	// also "Ray Sphere Intersection 1 Analytical.pdf"
-	static bool raySphereIntersection(const Ray& ray, vec3 C, float r, float* intersection_distance) {
+	//static bool raySphereIntersection(const Ray& ray, vec3 C, float r, float* intersection_distance) {
 
-		const vec3& A = ray.origin;
-		const vec3& B = ray.direction;
-		
-		assert(fabsf(length(B) - 1) < 1e-03);
-		
-		// work out components of quadratic
-		vec3 A_C = A - C;
-		float a = 1;
-		float b = 2*dot(B, A_C);
-		float c = dot(A_C, A_C) - r * r;
-		float discriminant = b * b - 4*a*c;
-		
-		if (discriminant < 0.0f) { // ray misses
-			return false; 
-		}
-		if (discriminant > 0.0f) { // ray hits at two points
-			// get the 2 intersection distances along ray
-			float t_a = -b + sqrtf(discriminant);
-			float t_b = -b - sqrtf(discriminant);
-			*intersection_distance = t_b;
-			// if behind viewer, throw one or both away
-			if (t_a < 0.0) {
-				if (t_b < 0.0) { return false; }
-			}
-			else if (t_b < 0.0) {
-				*intersection_distance = t_a;
-			}
+	//	const vec3& A = ray.origin;
+	//	const vec3& B = ray.direction;
+	//	
+	//	assert(fabsf(length(B) - 1) < 1e-03);
+	//	
+	//	// work out components of quadratic
+	//	vec3 A_C = A - C;
+	//	float a = 1;
+	//	float b = 2*dot(B, A_C);
+	//	float c = dot(A_C, A_C) - r * r;
+	//	float discriminant = b * b - 4*a*c;
+	//	
+	//	if (discriminant < 0.0f) { // ray misses
+	//		return false; 
+	//	}
+	//	if (discriminant > 0.0f) { // ray hits at two points
+	//		// get the 2 intersection distances along ray
+	//		float t_a = -b + sqrtf(discriminant);
+	//		float t_b = -b - sqrtf(discriminant);
+	//		*intersection_distance = t_b;
+	//		// if behind viewer, throw one or both away
+	//		if (t_a < 0.0) {
+	//			if (t_b < 0.0) { return false; }
+	//		}
+	//		else if (t_b < 0.0) {
+	//			*intersection_distance = t_a;
+	//		}
 
-			return true;
-		}
-		// check for ray hitting once (skimming the surface)
-		if (0.0f == discriminant) {
-			// if behind viewer, throw away
-			float t = -b + sqrtf(discriminant);
-			if (t < 0.0f) { return false; }
-			*intersection_distance = t;
-			return true;
-		}
-		return false;
-	}
+	//		return true;
+	//	}
+	//	// check for ray hitting once (skimming the surface)
+	//	if (0.0f == discriminant) {
+	//		// if behind viewer, throw away
+	//		float t = -b + sqrtf(discriminant);
+	//		if (t < 0.0f) { return false; }
+	//		*intersection_distance = t;
+	//		return true;
+	//	}
+	//	return false;
+	//}
 
 	// as in https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 	// also "Ray Sphere Intersection 2 Geometrical.pdf"
@@ -143,20 +143,29 @@ struct Exercise3 {
 		if (qSquared > 0.0f) // Two hits
 		{
 			float q = sqrtf(qSquared);
-			float idA = rayOrigin + rayDirection * (projOverRay - q);
-			float idA = rayOrigin + rayDirection * (projOverRay + q);
+			float idA = length(rayOrigin + rayDirection * (projOverRay - q));
+			float idB = length(rayOrigin + rayDirection * (projOverRay + q));
+
+			*intersection_distance = idB;
+
+			// if behind viewer, throw one or both away
+			if (idA < 0.0) {
+				if (idB < 0.0) { return false; }
+			}
+			else if (idA < 0.0) {
+				*intersection_distance = idB;
+			}
+			return true;
 		}
 
 		if (qSquared == 0.0f) // One hit
 		{
-
+			float id = length(rayOrigin + rayDirection * projOverRay);
+			if (id < 0.0f) { return false; }
+			*intersection_distance = id;
+			return true;
 		}
-
-		
-
-		
-
-		
+		return false;
 	}
 
 	static void onKeyPressed(GLFWwindow* window, int key, int scancode, int action, int mods){
