@@ -60,7 +60,9 @@ Practica 3
    ya está!
    
    
-  2. Ahora vas a trazar un rayo desde la cámara hacia la escena para saber con qué figura 3D choca primero. Queremos seleccionar la figura que caiga en la posición del ratón. Sabemos la posición del ratón en el plano cercano de la cámara (lo acabas de calcular), y también la posición de la cámara, ambos en espacio de mundo. Monta un rayo que vaya desde la posición de la cámara hacia la posición del ratón en espacio de mundo 3D, y comprueba que puedes seleccionar una esfera utilizando la rutina raySphereIntersection (solución incluida)
+  2. Ahora vas a trazar un rayo desde la cámara hacia la escena para saber con qué figura 3D choca primero. Queremos seleccionar la figura que caiga en la posición del ratón. 
+     Sabemos la posición del ratón en el plano cercano de la cámara (lo acabas de calcular), y también la posición de la cámara, ambos en espacio de mundo. 
+     Monta un rayo que vaya desde la posición de la cámara hacia la posición del ratón en espacio de mundo 3D, y comprueba que puedes seleccionar una esfera utilizando la rutina raySphereIntersection (solución incluida)
   
   3. intenta entender lo que está haciendo la rutina a partir de la documentación incluida en el comentario del código de la función
   
