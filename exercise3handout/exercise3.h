@@ -47,7 +47,24 @@ struct Exercise3 {
 	
 	static vec3 getWorldMousePosition(float mouse_x, float mouse_y, float windowsWidth, float windowsHeight, const mat4& projMat, const mat4& viewMat) {
 
-		return vec3(0, 0, 0);
+		//printf("ScreenCoords:\n x: %f\n y: %f\n", mouse_x, mouse_y);
+
+		float relativeMouseX = (mouse_x - (windowsWidth / 2)) / (windowsWidth / 2);
+		float relativeMouseY = (mouse_y - (windowsHeight / 2)) / (windowsHeight / 2) * -1;
+
+		printf("RelativeCoords:\n x: %f\n y: %f\n", relativeMouseX, relativeMouseY);
+
+		vec4 relativeMousePos = vec4(relativeMouseX, relativeMouseY, -1, 1);
+
+		vec4 viewCoords = inverse(projMat) * relativeMousePos;
+
+		viewCoords = homogeneous(viewCoords);
+
+		vec4 worldCoords = inverse(viewMat) * viewCoords;
+
+		//printf("WorldCoordinates:\n x: %f\n y: %f\n z: %f\n w: %f\n", worldCoords.x, worldCoords.y, worldCoords.z, worldCoords.w);
+
+		return vec3(worldCoords.x, worldCoords.y, worldCoords.z);
 
 	}
 
@@ -107,9 +124,40 @@ struct Exercise3 {
 
 	// as in https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 	// also "Ray Sphere Intersection 2 Geometrical.pdf"
-	//static bool raySphereIntersection(const Ray& ray, vec3 C, float r, float* intersection_distance) {
+	static bool raySphereIntersection(const Ray& ray, vec3 C, float r, float* intersection_distance) {
+		vec3 rayOrigin = ray.origin;
+		vec3 rayDirection = ray.direction;
 
-	//}
+		vec3 rayToCentroid = C - rayOrigin;
+
+		float crossProductMagnitude = length(cross(rayToCentroid, rayDirection));
+		float projOverRay = dot(rayToCentroid, rayDirection);
+
+		float qSquared = (r * r) - (crossProductMagnitude * crossProductMagnitude);
+
+		if (qSquared < 0.0f)
+		{
+			return false;
+		}
+
+		if (qSquared > 0.0f) // Two hits
+		{
+			float q = sqrtf(qSquared);
+			float idA = rayOrigin + rayDirection * (projOverRay - q);
+			float idA = rayOrigin + rayDirection * (projOverRay + q);
+		}
+
+		if (qSquared == 0.0f) // One hit
+		{
+
+		}
+
+		
+
+		
+
+		
+	}
 
 	static void onKeyPressed(GLFWwindow* window, int key, int scancode, int action, int mods){
 
@@ -310,8 +358,8 @@ struct Exercise3 {
 			prevMousePosX = mousePosX;
 			prevMousePosY = mousePosY;
 
-			camYaw += -mouseDeltaX * camera.yaw_speed * elapsed_seconds;
-			camPitch += -mouseDeltaY * camera.yaw_speed * elapsed_seconds;
+			/*camYaw += -mouseDeltaX * camera.yaw_speed * elapsed_seconds;
+			camPitch += -mouseDeltaY * camera.yaw_speed * elapsed_seconds;*/
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_A)) {
