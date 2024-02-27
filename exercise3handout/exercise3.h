@@ -135,36 +135,39 @@ struct Exercise3 {
 
 		float qSquared = (r * r) - (crossProductMagnitude * crossProductMagnitude);
 
-		if (qSquared < 0.0f)
-		{
-			return false;
-		}
-
-		if (qSquared > 0.0f) // Two hits
+		if (crossProductMagnitude < r)
 		{
 			float q = sqrtf(qSquared);
-			float idA = length(rayOrigin + rayDirection * (projOverRay - q));
-			float idB = length(rayOrigin + rayDirection * (projOverRay + q));
-
-			*intersection_distance = idB;
-
-			// if behind viewer, throw one or both away
-			if (idA < 0.0) {
-				if (idB < 0.0) { return false; }
-			}
-			else if (idA < 0.0) {
-				*intersection_distance = idB;
-			}
-			return true;
-		}
-
-		if (qSquared == 0.0f) // One hit
-		{
-			float id = length(rayOrigin + rayDirection * projOverRay);
-			if (id < 0.0f) { return false; }
+			float id = projOverRay - q;
 			*intersection_distance = id;
 			return true;
 		}
+
+		//else if (qSquared > 0.0f) // Two hits
+		//{
+		//	float q = sqrtf(qSquared);
+		//	float idA = length(rayOrigin + rayDirection * (projOverRay - q));
+		//	float idB = length(rayOrigin + rayDirection * (projOverRay + q));
+
+		//	*intersection_distance = idB;
+
+		//	// if behind viewer, throw one or both away
+		//	if (idA < 0.0) {
+		//		if (idB < 0.0) { return false; }
+		//	}
+		//	else if (idA < 0.0) {
+		//		*intersection_distance = idB;
+		//	}
+		//	return true;
+		//}
+
+		//else if (qSquared == 0.0f) // One hit
+		//{
+		//	float id = length(rayOrigin + rayDirection * projOverRay);
+		//	if (id < 0.0f) { return false; }
+		//	*intersection_distance = id;
+		//	return true;
+		//}
 		return false;
 	}
 
